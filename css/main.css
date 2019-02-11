@@ -897,7 +897,7 @@ select[multiple] {
   overflow: auto; }
 
 .docs-intro {
-  margin-left: 20px; }
+  margin-left: 120px 0 0 20px; }
 
 @media screen and (max-width: break-xl) {
   .docs-header {

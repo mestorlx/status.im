@@ -215,27 +215,16 @@
       <div class="get-status-desktop">
         <div class="get-status-desktop-links">
           <ul>
-            <li><a href="https://ci.status.im/job/status-react/job/combined/job/desktop-macos/4971/artifact/StatusImPackage/StatusIm-181224-165548-797a3a-release.dmg" class="desktop-link desktop-link--mac link-arrow">Get for Mac OS</a></li>
-            <li><a href="https://ci.status.im/job/status-react/job/combined/job/desktop-linux/4958/artifact/StatusImPackage/StatusIm-181224-165548-797a3a-release.AppImage" class="desktop-link desktop-link--linux link-arrow">Get for Linux</a></li>
-            <li><a href="https://ci.status.im/job/status-react/job/combined/job/desktop-windows/1443/artifact/StatusImPackage/StatusIm-181224-165548-797a3a-release.exe" class="desktop-link desktop-link--windows link-arrow">Get for Windows</a></li>
+            <li>
+                <a href="https://status-im.ams3.digitaloceanspaces.com/StatusIm-181224-165548-797a3a-release.dmg" class="desktop-link desktop-link--mac link-arrow app-download" id="release:mac" download="">Get for Mac OS</a>
+            </li>
+            <li>
+                <a href="https://status-im.ams3.digitaloceanspaces.com/StatusIm-181224-165548-797a3a-release.AppImage" class="desktop-link desktop-link--linux link-arrow app-download" id="release:app" download="">Get for Linux</a>
+            </li>
+            <li>
+                <a href="https://status-im.ams3.digitaloceanspaces.com/StatusIm-181224-165548-797a3a-release.exe" class="desktop-link desktop-link--windows link-arrow app-download" id="release:win" download="">Get for Windows</a>
+            </li>
           </ul>
-        </div>
-        <div class="get-status-desktop-mobile-warning">
-          <p>This is alpha software and may contain vulnerabilities. Please expect changes.</p>
-        </div>
-        <div class="get-status-desktop-mobile-links">
-          <a class="button" href="https://ci.status.im/job/status-react/job/combined/job/desktop-macos/4971/artifact/StatusImPackage/StatusIm-181224-165548-797a3a-release.">
-              <span class="button-icon button-icon--ios"></span>
-              Get Status for Mac OS
-          </a>
-          <a class="button" href="https://ci.status.im/job/status-react/job/combined/job/desktop-linux/4958/artifact/StatusImPackage/StatusIm-181224-165548-797a3a-release.AppImage">
-              <span class="button-icon button-icon--linux"></span>
-              Get Status for Linux
-          </a>
-          <a class="button" href="https://ci.status.im/job/status-react/job/combined/job/desktop-windows/1443/artifact/StatusImPackage/StatusIm-181224-165548-797a3a-release.exe">
-            <span class="button-icon button-icon--windows"></span>
-            Get Status for Windows
-          </a>
         </div>
         <div class="get-status-desktop-screen">
           <div class="get-status-desktop-screen-inner"></div>
@@ -299,26 +288,36 @@
 <script src="/js/vendor.min.js"></script>
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
-  <script>
-    String.prototype.replaceAll = function(search, replacement) {
-      var target = this;
-      return target.split(search).join(replacement);
-    };
+<script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
+<script>
+  String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+  };
 
-    let vizObjects = document.querySelectorAll('.graphviz');
+  let vizObjects = document.querySelectorAll('.graphviz');
 
-    for (let item of vizObjects) {
-      let svg = undefined
-      try {
-        svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
-      } catch(e) {
-        svg = `<pre class="error">${e}</pre>`;
-      }
-      item.outerHTML = svg;
+  for (let item of vizObjects) {
+    let svg = undefined
+    try {
+      svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
+    } catch(e) {
+      svg = `<pre class="error">${e}</pre>`;
     }
-  </script>
+    item.outerHTML = svg;
+  }
+</script>
 
+
+<script>
+  /* This POSTs to the clicks-api service to click numbers of downloads of different releases */
+  $(document).ready(function () {
+    $('a.app-download').click(function (ev) {
+      let downloadType = $(this).closest('a').attr('id')
+      $.post(`https://clicks.status.im/clicks/${downloadType}`)
+    });
+  });
+</script>
 
 </body>
 </html>

@@ -257,13 +257,14 @@
             <div class="inner">
               <div class="article-content" itemprop="articleBody">
                 <p>See below for a list of open positions at Status. If you believe you can contribute, but don’t see a role that closely matches your skills - please send a short note and your CV to <a href="mailto:talent@status.im" target="_blank" rel="noopener">talent@status.im</a>.</p>
-<p>Please note that all of our positions are remote - we welcome contributors from all over the globe.<br>&lt;%- </p>
+<p>Please note that all of our positions are remote - we welcome contributors from all over the globe.</p>
 <p><div id="grnhse_app"></div></p>
-<p><script src="https://boards.greenhouse.io/embed/job_board/js?for=status72"></script><br>%&gt;</p>
+<script src="https://boards.greenhouse.io/embed/job_board/js?for=status72"></script>
+
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2019-01-25T03:20:16.524Z" itemprop="dateModified">마지막 업데이트: 2019-01-25</time>
+                <time class="article-footer-updated" datetime="2019-02-11T14:04:03.561Z" itemprop="dateModified">마지막 업데이트: 2019-02-11</time>
                 
               </footer>
             </div>
@@ -329,26 +330,36 @@
 <script src="/js/vendor.min.js"></script>
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
-  <script>
-    String.prototype.replaceAll = function(search, replacement) {
-      var target = this;
-      return target.split(search).join(replacement);
-    };
+<script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
+<script>
+  String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+  };
 
-    let vizObjects = document.querySelectorAll('.graphviz');
+  let vizObjects = document.querySelectorAll('.graphviz');
 
-    for (let item of vizObjects) {
-      let svg = undefined
-      try {
-        svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
-      } catch(e) {
-        svg = `<pre class="error">${e}</pre>`;
-      }
-      item.outerHTML = svg;
+  for (let item of vizObjects) {
+    let svg = undefined
+    try {
+      svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
+    } catch(e) {
+      svg = `<pre class="error">${e}</pre>`;
     }
-  </script>
+    item.outerHTML = svg;
+  }
+</script>
 
+
+<script>
+  /* This POSTs to the clicks-api service to click numbers of downloads of different releases */
+  $(document).ready(function () {
+    $('a.app-download').click(function (ev) {
+      let downloadType = $(this).closest('a').attr('id')
+      $.post(`https://clicks.status.im/clicks/${downloadType}`)
+    });
+  });
+</script>
 
 </body>
 </html>

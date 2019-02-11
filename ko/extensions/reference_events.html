@@ -270,8 +270,16 @@
 <td>value :string</td>
 </tr>
 <tr>
+<td>selection-screen</td>
+<td>items :vector, on-select :event, render :view, title :string, extractor-key :keyword</td>
+</tr>
+<tr>
 <td>log</td>
 <td>value :string</td>
+</tr>
+<tr>
+<td>arithmetic</td>
+<td>values :vector, operatation {:one-of #{:plus :minus :times :divide}}, on-result :event</td>
 </tr>
 <tr>
 <td>json/parse</td>
@@ -287,15 +295,19 @@
 </tr>
 <tr>
 <td>store/append</td>
-<td>key :string, value :string</td>
+<td>key :string, value :any</td>
 </tr>
 <tr>
 <td>store/clear</td>
-<td>key :string,</td>
+<td>key :string</td>
+</tr>
+<tr>
+<td>store/clear-all</td>
+<td>n/a</td>
 </tr>
 <tr>
 <td>store/put</td>
-<td>key :string, value :string</td>
+<td>key :string, value :any</td>
 </tr>
 <tr>
 <td>store/puts</td>
@@ -342,20 +354,96 @@
 <td>hash :string, on-success :event, on-failure? :event</td>
 </tr>
 <tr>
+<td>ipfs/add</td>
+<td>value :string, on-success  :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum/transaction-receipt</td>
+<td>value :string, on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum/await-transaction-receipt</td>
+<td>value :string, interval :number, on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum/sign</td>
+<td>message? :string, data? :string, on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum/create-address</td>
+<td>on-result :event</td>
+</tr>
+<tr>
 <td>ethereum/send-transaction</td>
 <td>to :string, gas? :string, gas-price? :string, value? :string, method? :string, params? :vector, nonce? :string, on-success  :event, on-failure? :event</td>
 </tr>
 <tr>
 <td>ethereum/call</td>
-<td>to :string, method :string, params? :vector, on-success  :event, on-failure? :event</td>
+<td>to :string, method :string, params? :vector, outputs? :vector, on-success  :event, on-failure? :event</td>
 </tr>
 <tr>
 <td>ethereum/logs</td>
 <td>from? :string, to? :string, address? :vector, topics? :vector, block-hash? :string, on-success  :event, on-failure? :event</td>
 </tr>
 <tr>
+<td>ethereum/create-filter</td>
+<td>type {:one-of #{:filter :block :pending-transaction}}, from? :string, to? :string, address? :vector, topics? :vector, block-hash? :string, on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum/logs-changes</td>
+<td>id :string</td>
+</tr>
+<tr>
+<td>ethereum/cancel-filter</td>
+<td>ethereum/cancel-filter</td>
+</tr>
+<tr>
 <td>ethereum.ens/resolve</td>
 <td>name :string, on-success  :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum.erc20/total-supply</td>
+<td>contract :string,  on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum.erc20/balance-of</td>
+<td>contract :string, token-owner :string, on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum.erc20/transfer</td>
+<td>contract :string, to :string, value :number, on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum.erc20/transfer-from</td>
+<td>contract :string, to :string, from :string, value :number, on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum.erc20/approve</td>
+<td>contract :string, spender :string, value :number, on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum.erc20/allowance</td>
+<td>contract :string, token-owner :string, spender :string, on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum.erc721/owner-of</td>
+<td>contract :string, token-id :string, on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum.erc721/is-approved-for-all</td>
+<td>contract :string, owner :string, operator :string, on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum.erc721/get-approved</td>
+<td>contract :string, token-id :string, on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum.erc721/set-approval-for-all</td>
+<td>contract :string, operator :string, approved :boolean, on-success :event, on-failure? :event</td>
+</tr>
+<tr>
+<td>ethereum.erc721/safe-transfer-from</td>
+<td>contract :string, :from :string, to :string, token-id :string, data? :string, on-success :event, on-failure? :event</td>
 </tr>
 </tbody>
 </table>
@@ -365,7 +453,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2019-01-25T03:20:16.532Z" itemprop="dateModified">마지막 업데이트: 2019-01-25</time>
+                <time class="article-footer-updated" datetime="2019-02-11T14:04:03.561Z" itemprop="dateModified">마지막 업데이트: 2019-02-11</time>
                 
               </footer>
             </div>
@@ -431,26 +519,36 @@
 <script src="/js/vendor.min.js"></script>
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
-  <script>
-    String.prototype.replaceAll = function(search, replacement) {
-      var target = this;
-      return target.split(search).join(replacement);
-    };
+<script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
+<script>
+  String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+  };
 
-    let vizObjects = document.querySelectorAll('.graphviz');
+  let vizObjects = document.querySelectorAll('.graphviz');
 
-    for (let item of vizObjects) {
-      let svg = undefined
-      try {
-        svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
-      } catch(e) {
-        svg = `<pre class="error">${e}</pre>`;
-      }
-      item.outerHTML = svg;
+  for (let item of vizObjects) {
+    let svg = undefined
+    try {
+      svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
+    } catch(e) {
+      svg = `<pre class="error">${e}</pre>`;
     }
-  </script>
+    item.outerHTML = svg;
+  }
+</script>
 
+
+<script>
+  /* This POSTs to the clicks-api service to click numbers of downloads of different releases */
+  $(document).ready(function () {
+    $('a.app-download').click(function (ev) {
+      let downloadType = $(this).closest('a').attr('id')
+      $.post(`https://clicks.status.im/clicks/${downloadType}`)
+    });
+  });
+</script>
 
 </body>
 </html>

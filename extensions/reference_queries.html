@@ -270,12 +270,16 @@
 <td>key :string</td>
 </tr>
 <tr>
+<td>wallet/balance</td>
+<td>token :string</td>
+</tr>
+<tr>
 <td>wallet/token</td>
-<td>token :string, amount? :number</td>
+<td>token :string, amount? :number, amount-in-wei? :number</td>
 </tr>
 <tr>
 <td>wallet/tokens</td>
-<td>filter :vector</td>
+<td>filter? :vector, visible? :boolean</td>
 </tr>
 <tr>
 <td>wallet/collectibles</td>
@@ -290,7 +294,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2019-01-25T03:20:16.532Z" itemprop="dateModified">Last updated: 2019-01-25</time>
+                <time class="article-footer-updated" datetime="2019-02-11T14:04:03.561Z" itemprop="dateModified">Last updated: 2019-02-11</time>
                 <a href="reference_views.html" class="article-footer-prev" title="Views"><i class="fa fa-chevron-left"></i><span>Prev</span></a><a href="reference_events.html" class="article-footer-next" title="Events"><span>Next</span><i class="fa fa-chevron-right"></i></a>
               </footer>
             </div>
@@ -356,26 +360,36 @@
 <script src="/js/vendor.min.js"></script>
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
-  <script>
-    String.prototype.replaceAll = function(search, replacement) {
-      var target = this;
-      return target.split(search).join(replacement);
-    };
+<script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
+<script>
+  String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+  };
 
-    let vizObjects = document.querySelectorAll('.graphviz');
+  let vizObjects = document.querySelectorAll('.graphviz');
 
-    for (let item of vizObjects) {
-      let svg = undefined
-      try {
-        svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
-      } catch(e) {
-        svg = `<pre class="error">${e}</pre>`;
-      }
-      item.outerHTML = svg;
+  for (let item of vizObjects) {
+    let svg = undefined
+    try {
+      svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
+    } catch(e) {
+      svg = `<pre class="error">${e}</pre>`;
     }
-  </script>
+    item.outerHTML = svg;
+  }
+</script>
 
+
+<script>
+  /* This POSTs to the clicks-api service to click numbers of downloads of different releases */
+  $(document).ready(function () {
+    $('a.app-download').click(function (ev) {
+      let downloadType = $(this).closest('a').attr('id')
+      $.post(`https://clicks.status.im/clicks/${downloadType}`)
+    });
+  });
+</script>
 
 </body>
 </html>

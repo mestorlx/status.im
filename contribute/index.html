@@ -282,13 +282,12 @@
 <li>Download the app and join our community. We’d love to see you there. </li>
 <li>We’re an Open Source project, so you can check out our repositories and <a href="https://github.com/status-im" target="_blank" rel="noopener">contribute code here</a>. Look for the label: <a href="https://github.com/status-im/status-react/labels/good%20first%20issue" target="_blank" rel="noopener">“good first issue”</a> to get started. </li>
 <li>Complete one of our <a href="https://gitcoin.co/explorer?network=mainnet&amp;idx_status=open&amp;keywords=status.im&amp;order_by=-web3_created" target="_blank" rel="noopener">bounties listed on gitcoin</a>.</li>
-<li>Join the <a href="https://statusphere.status.im/" target="_blank" rel="noopener">Status Advocacy Program</a> - share your expertise, showcase your creativity, and help spread the Status love - all while earning SNT rewards.</li>
-<li>And of course, we’re always looking for core contributors to join us on a full/part time basis. Use the navigation to the left to find out more.</li>
+<li>Occasionally we look to hire core contributors to join us on a full/part time basis. Use the navigation to the left to find out more.</li>
 </ol>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2019-01-25T03:20:16.524Z" itemprop="dateModified">Last updated: 2019-01-25</time>
+                <time class="article-footer-updated" datetime="2019-02-11T14:04:03.561Z" itemprop="dateModified">Last updated: 2019-02-11</time>
                 <a href="perks_benefits.html" class="article-footer-next" title="Perks and Benefits"><span>Next</span><i class="fa fa-chevron-right"></i></a>
               </footer>
             </div>
@@ -354,26 +353,36 @@
 <script src="/js/vendor.min.js"></script>
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
-  <script>
-    String.prototype.replaceAll = function(search, replacement) {
-      var target = this;
-      return target.split(search).join(replacement);
-    };
+<script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
+<script>
+  String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+  };
 
-    let vizObjects = document.querySelectorAll('.graphviz');
+  let vizObjects = document.querySelectorAll('.graphviz');
 
-    for (let item of vizObjects) {
-      let svg = undefined
-      try {
-        svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
-      } catch(e) {
-        svg = `<pre class="error">${e}</pre>`;
-      }
-      item.outerHTML = svg;
+  for (let item of vizObjects) {
+    let svg = undefined
+    try {
+      svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
+    } catch(e) {
+      svg = `<pre class="error">${e}</pre>`;
     }
-  </script>
+    item.outerHTML = svg;
+  }
+</script>
 
+
+<script>
+  /* This POSTs to the clicks-api service to click numbers of downloads of different releases */
+  $(document).ready(function () {
+    $('a.app-download').click(function (ev) {
+      let downloadType = $(this).closest('a').attr('id')
+      $.post(`https://clicks.status.im/clicks/${downloadType}`)
+    });
+  });
+</script>
 
 </body>
 </html>

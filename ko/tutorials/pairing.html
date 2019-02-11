@@ -2,11 +2,11 @@
 <html lang="ko">
 <head prefix="og: http://ogp.me/ns#"><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
-  <title>About Status | Status</title>
+  <title>Pairing devices | Status</title>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://dev.status.im/ko/app/index.html">
+  <link rel="canonical" href="https://dev.status.im/ko/tutorials/pairing.html">
   <!-- Alternative links -->
   
   <!-- Icon -->
@@ -203,64 +203,109 @@
 
     
     <div class="page-intro wrapper">
-  <header class="article-header-desktop">
-     <div class="get-status-intro get-status-intro--desktop">
-          <h2>What's Your Status?</h2>
-          <p>The internet is controlled by powerful corporations who do not always have our best interests at heart. We want to change that. Find out what it really means to express yourself securely on web3.</p>
-      </div>
+<div class="search">
+    <input type="text" name="userSearch" id="userSearch" placeholder="Search...">
+    <script type="text/javascript" defer>
+        const meta = $('meta[property=elasticsearch');
+        const esHost = meta.data('es-host');
+        const esPort = meta.data('es-port');
+        const esIndex = meta.data('es-index');
+        const args = `size=4&_source=title,url&`
+        $('input#userSearch').marcoPolo({
+            url: `https://${esHost}:${esPort}/${esIndex}/_search?${args}`,
+            minChars: 3,
+            formatItem: function (data, $item) {
+                return data.title || data.url;
+            },
+            formatData: function (data) {
+                return data.hits.hits.map(function(obj) {
+                    return obj._source;
+                });
+            },
+            onSelect: function (data, $item) {
+                window.location = data.url;
+            }
+        });
+    </script>
+</div>
+<div class="clear"></div>
 
-      <div class="get-status-info">
-
-        <div class="get-status-phones">
-          <div class="phone-wrap">
-            <div class="phone-inner"></div>
-          </div>
-          <div class="phone-wrap">
-            <div class="phone-inner"></div>
-          </div>
+  <header class="docs-header">
+    <div class="docs-intro">
+      <h1>Learn How To Build A Better Web</h1>
+      <p>"To work hard, at work worth doing"</p>
+      <br>
+    </div>
+    <ul>
+      <li>
+        <div class="inner">
+          <h3>Developer Tools</h3>
+          <p>#MakeCodingGreatAgain</p>
         </div>
-
-        <div class="get-status-links">
-          <div class="get-status-links-top">
-            <a href="#" class="get-link">
-              <div class="get-link-icon get-link-icon--ios"></div>
-              <h4>Status for IOS</h4>
-              <p class="secondary-text">Chat, transact, and access a revolutionary new world of ÐApps.</p>
-              <p class="get-link-text--mobile">Request Beta access</p>
-              <span class="link-arrow" href="https://testflight.apple.com/join/J8EuJmey">Get Status for IOS</span>
-            </a>
-
-            <a href="#" class="get-link">
-              <div class="get-link-icon get-link-icon--android"></div>
-              <h4>Status for Android</h4>
-              <p class="secondary-text">Do the same on Android, and access more features like our upcoming hardwallet.</p>
-              <p class="get-link-text--mobile">Get on Google Play</p>
-              <span class="link-arrow" href="https://play.google.com/store/apps/details?id=im.status.ethereum">Get Status for Android</span>
-            </a>
-
-          </div>
-          <div class="get-status-links-bottom">
-            <a href="#" class="get-link">
-              <p class="secondary-text">Status is also available for Desktop</p>
-              <span class="link-arrow" href="/get_desktop/">Get Status for Desktop</span>
-            </a>
-          </div>
+        <img src="../img/arrow_blue_shaded.svg">
+        <a href="/developer_tools/"></a>
+      </li>
+      <li>
+        <div class="inner">
+          <h3>Build Status</h3>
+          <p>For mobile and desktop</p>
         </div>
-
-      </div>
+        <img src="../img/arrow_blue_shaded.svg">
+        <a href="/build_status/"></a>
+      </li>
+      <li>
+        <div class="inner">
+          <h3>Extensions</h3>
+          <p>Extend Your Reach</p>
+        </div>
+        <img src="../img/arrow_blue_shaded.svg">
+        <a href="/extensions/"></a>
+      </li>
+    </ul>
   </header>
 </div>
 <div id="content-wrap">
   <div id="content" class="wrapper">
     <div id="content-inner">
+      <aside id="sidebar" role="navigation">
+  <div class="inner">
+    <strong class="sidebar-title">Whisper</strong><a href="whisper_basic_cli.html" class="sidebar-link">Whisper In Your CLI</a><a href="whisper_embark.html" class="sidebar-link">Whisper With Embark</a><strong class="sidebar-title">확장 프로그램</strong><a href="extensions_chat_command.html" class="sidebar-link">Extend Your Chat</a>
+  </div>
+</aside>
       <article class="article-container" itemscope="" itemtype="http://schema.org/Article">
         <div class="article-inner">
           <div class="article">
             <div class="inner">
               <div class="article-content" itemprop="articleBody">
-                <h1>The Journey to a Better Web Begins Here</h1>
-                <p>Jonny to blow minds.</p>
+                <p>This tutorial will explain how to correctly pair your devices, allowing your status client to sync contacts, public chats &amp; messages.</p>
+<h1 id="What-is-synced" class="article-heading"><a href="#What-is-synced" class="headerlink" title="What is synced"></a>What is synced<a class="article-anchor" href="#What-is-synced" aria-hidden="true"></a></h1><p>Currently we sync:</p>
+<ul>
+<li>your profile picture and name</li>
+<li>your open public chats</li>
+<li>the messages you send in chats</li>
+<li>your contacts</li>
+</ul>
+<p>Some things we do not sync:</p>
+<ul>
+<li>Seen status in your chats</li>
+<li>messages you sent before pairing</li>
+<li>If removing a chat on device B, or clearing history, it won’t be removed on device A</li>
+<li>Push notifications will only be received on one device</li>
+</ul>
+<h1 id="How-it-works" class="article-heading"><a href="#How-it-works" class="headerlink" title="How it works"></a>How it works<a class="article-anchor" href="#How-it-works" aria-hidden="true"></a></h1><p>First you need to <em>pair</em> and <em>enable</em> your devices (say A &amp; B), this operation is symmetrical and needs to be done on both device.</p>
+<p>A maximum of 3 devices can be paired.</p>
+<h2 id="Instructions" class="article-heading"><a href="#Instructions" class="headerlink" title="Instructions"></a>Instructions<a class="article-anchor" href="#Instructions" aria-hidden="true"></a></h2><p>Go to Profile-&gt;Devices.<br>You will be asked to set a name for your device.<br>Once you set a name, click on <code>Pair this device</code> on both devices.<br>You should see now the two devices in the device lists.<br>Enable the devices on both.</p>
+<h3 id="Syncing-old-data" class="article-heading"><a href="#Syncing-old-data" class="headerlink" title="Syncing old data"></a>Syncing old data<a class="article-anchor" href="#Syncing-old-data" aria-hidden="true"></a></h3><p>Once you have enabled the device, new information will be kept in sync.<br>To sync old data (contacts and open public chats, account profile), click on <code>Sync all devices</code> on the device where you have the data, and it should then appear on the other device if synced correcly.</p>
+<h1 id="Troubleshooting" class="article-heading"><a href="#Troubleshooting" class="headerlink" title="Troubleshooting"></a>Troubleshooting<a class="article-anchor" href="#Troubleshooting" aria-hidden="true"></a></h1><h2 id="Data-is-not-synced" class="article-heading"><a href="#Data-is-not-synced" class="headerlink" title="Data is not synced"></a>Data is not synced<a class="article-anchor" href="#Data-is-not-synced" aria-hidden="true"></a></h2><p>Make sure devices are paired correctly and enabled. If the problem still persist you can try clicking on <code>Pair this device</code> again on both devices and <code>disable</code> and <code>enable</code> them again. In any case please open an issue at <a href="https://github.com/status-im/status-react" target="_blank" rel="noopener">https://github.com/status-im/status-react</a> and upload your <code>geth.log</code> from both devices (after sending a message from both device A &amp; B)</p>
+<h2 id="I-see-“No-info”-on-one-device" class="article-heading"><a href="#I-see-“No-info”-on-one-device" class="headerlink" title="I see “No info” on one device"></a>I see “No info” on one device<a class="article-anchor" href="#I-see-“No-info”-on-one-device" aria-hidden="true"></a></h2><p>Click on “Pair this device” on the other device, and “No info” should be replaced with the actual device name</p>
+<h1 id="Examples" class="article-heading"><a href="#Examples" class="headerlink" title="Examples"></a>Examples<a class="article-anchor" href="#Examples" aria-hidden="true"></a></h1><h3 id="Example-on-android" class="article-heading"><a href="#Example-on-android" class="headerlink" title="Example on android"></a>Example on android<a class="article-anchor" href="#Example-on-android" aria-hidden="true"></a></h3><p><img src="../img/pairing_android_01.png" alt="android-1"><br><img src="../img/pairing_android_02.png" alt="android-2"><br><img src="../img/pairing_android_03.png" alt="android-3"><br><img src="../img/pairing_android_04.png" alt="android-4"><br><img src="../img/pairing_android_05.png" alt="android-5"></p>
+<h3 id="Example-on-desktop" class="article-heading"><a href="#Example-on-desktop" class="headerlink" title="Example on desktop"></a>Example on desktop<a class="article-anchor" href="#Example-on-desktop" aria-hidden="true"></a></h3><p><img src="../img/pairing_desktop_01.png" alt="android-1"><br><img src="../img/pairing_desktop_02.png" alt="android-2"><br><img src="../img/pairing_desktop_03.png" alt="android-3"><br><img src="../img/pairing_desktop_04.png" alt="android-4"><br><img src="../img/pairing_desktop_05.png" alt="android-5"></p>
+
               </div>
+              <footer class="article-footer">
+                <time class="article-footer-updated" datetime="2019-02-11T14:04:03.561Z" itemprop="dateModified">마지막 업데이트: 2019-02-11</time>
+                
+              </footer>
             </div>
           </div>
         </div>
@@ -324,26 +369,36 @@
 <script src="/js/vendor.min.js"></script>
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
-  <script>
-    String.prototype.replaceAll = function(search, replacement) {
-      var target = this;
-      return target.split(search).join(replacement);
-    };
+<script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
+<script>
+  String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+  };
 
-    let vizObjects = document.querySelectorAll('.graphviz');
+  let vizObjects = document.querySelectorAll('.graphviz');
 
-    for (let item of vizObjects) {
-      let svg = undefined
-      try {
-        svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
-      } catch(e) {
-        svg = `<pre class="error">${e}</pre>`;
-      }
-      item.outerHTML = svg;
+  for (let item of vizObjects) {
+    let svg = undefined
+    try {
+      svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
+    } catch(e) {
+      svg = `<pre class="error">${e}</pre>`;
     }
-  </script>
+    item.outerHTML = svg;
+  }
+</script>
 
+
+<script>
+  /* This POSTs to the clicks-api service to click numbers of downloads of different releases */
+  $(document).ready(function () {
+    $('a.app-download').click(function (ev) {
+      let downloadType = $(this).closest('a').attr('id')
+      $.post(`https://clicks.status.im/clicks/${downloadType}`)
+    });
+  });
+</script>
 
 </body>
 </html>

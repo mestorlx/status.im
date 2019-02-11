@@ -341,6 +341,7 @@
                 :type          :text
                 :placeholder   &quot;Collectible name&quot;}]
 </code></pre><p>This example allows a user to select between their various collectibles, either by typing in the “Collectible name” or using the UI’s suggestions.</p>
+<p>Type can be one of <code>:text</code>, <code>:phone</code>, <code>:password</code> or <code>:number</code>. The keyboard layout will be modified to reflect this value.</p>
 <h3 id="Suggestions" class="article-heading"><a href="#Suggestions" class="headerlink" title="Suggestions"></a>Suggestions<a class="article-anchor" href="#Suggestions" aria-hidden="true"></a></h3><p>A parameter can optionally include <code>suggestions</code> to cue the user with additional UI components.</p>
 <pre><code>:parameters   [{:id            :collectible-id
                 :type          :text
@@ -361,7 +362,13 @@
  :content-type command
  :content {:command-path [collectible #{:personal-chats}]
            :params {:collectible-id    &quot;CK&quot;}}}
-</code></pre><h1 id="Wallet-settings" class="article-heading"><a href="#Wallet-settings" class="headerlink" title="Wallet settings"></a>Wallet settings<a class="article-anchor" href="#Wallet-settings" aria-hidden="true"></a></h1><p>Wallet settings hook allow you to plug extra panels in the wallet. Those will be accessible via the wallet settings menu.</p>
+</code></pre><h2 id="on-send-sync" class="article-heading"><a href="#on-send-sync" class="headerlink" title="on-send-sync"></a>on-send-sync<a class="article-anchor" href="#on-send-sync" aria-hidden="true"></a></h2><p><code>on-send-sync</code> allows a extension developer to programmatically control when the chat message will be sent. It is not automatically sent when the user hits the <code>send</code> button.<br>To send a message, use the <code>chat.command/send-message</code> or <code>chat.command/send-plain-text-message</code> events.</p>
+<pre><code> events/on-send-sync
+ (let [{{{title :title text :text} :params} :content} properties]
+   [chat.command/send-plain-text-message {:value &quot;*${title}*\n${text}\nhttps://people-ops.status.im/status-principles/&quot;}])
+
+</code></pre><p>Note that <code>on-send</code> is then ignored. Messages views still rely on <code>preview</code> and <code>short-preview</code>.</p>
+<h1 id="Wallet-settings" class="article-heading"><a href="#Wallet-settings" class="headerlink" title="Wallet settings"></a>Wallet settings<a class="article-anchor" href="#Wallet-settings" aria-hidden="true"></a></h1><p>Wallet settings hook allow you to plug extra panels in the wallet. Those will be accessible via the wallet settings menu.</p>
 <p>To implement a wallet settings you will need to provide the following properties:</p>
 <ul>
 <li>label (the name that will be displayed in the wallet settings menu)</li>
@@ -377,7 +384,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2019-01-25T03:20:16.532Z" itemprop="dateModified">Última actualización: 2019-01-25</time>
+                <time class="article-footer-updated" datetime="2019-02-11T14:04:03.561Z" itemprop="dateModified">Última actualización: 2019-02-11</time>
                 
               </footer>
             </div>
@@ -443,26 +450,36 @@
 <script src="/js/vendor.min.js"></script>
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
-  <script>
-    String.prototype.replaceAll = function(search, replacement) {
-      var target = this;
-      return target.split(search).join(replacement);
-    };
+<script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
+<script>
+  String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+  };
 
-    let vizObjects = document.querySelectorAll('.graphviz');
+  let vizObjects = document.querySelectorAll('.graphviz');
 
-    for (let item of vizObjects) {
-      let svg = undefined
-      try {
-        svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
-      } catch(e) {
-        svg = `<pre class="error">${e}</pre>`;
-      }
-      item.outerHTML = svg;
+  for (let item of vizObjects) {
+    let svg = undefined
+    try {
+      svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
+    } catch(e) {
+      svg = `<pre class="error">${e}</pre>`;
     }
-  </script>
+    item.outerHTML = svg;
+  }
+</script>
 
+
+<script>
+  /* This POSTs to the clicks-api service to click numbers of downloads of different releases */
+  $(document).ready(function () {
+    $('a.app-download').click(function (ev) {
+      let downloadType = $(this).closest('a').attr('id')
+      $.post(`https://clicks.status.im/clicks/${downloadType}`)
+    });
+  });
+</script>
 
 </body>
 </html>

@@ -222,20 +222,20 @@
 
         <div class="get-status-links">
           <div class="get-status-links-top">
-            <a href="https://testflight.apple.com/join/J8EuJmey" class="get-link">
+            <a href="https://testflight.apple.com/join/J8EuJmey" class="get-link app-download" id="release:ios">
               <div class="get-link-icon get-link-icon--ios"></div>
               <h4>Status for IOS</h4>
               <p class="secondary-text">Chat, transact, and access a revolutionary new world of ÐApps.</p>
               <p class="get-link-text--mobile">Request Beta access</p>
-              <span class="link-arrow" href="https://testflight.apple.com/join/J8EuJmey">Get Status for IOS</span>
+              <span class="link-arrow">Get Status for IOS</span>
             </a>
 
-            <a href="https://play.google.com/store/apps/details?id=im.status.ethereum" class="get-link">
+            <a href="https://play.google.com/store/apps/details?id=im.status.ethereum" class="get-link app-download" id="release:apk">
               <div class="get-link-icon get-link-icon--android"></div>
               <h4>Status for Android</h4>
               <p class="secondary-text">Do the same on Android, and access more features like our upcoming hardwallet.</p>
               <p class="get-link-text--mobile">Get on Google Play</p>
-              <span class="link-arrow" href="https://play.google.com/store/apps/details?id=im.status.ethereum">Get Status for Android</span>
+              <span class="link-arrow">Get Status for Android</span>
             </a>
 
           </div>
@@ -315,26 +315,36 @@
 <script src="/js/vendor.min.js"></script>
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
-  <script>
-    String.prototype.replaceAll = function(search, replacement) {
-      var target = this;
-      return target.split(search).join(replacement);
-    };
+<script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.1/viz.js"></script>
+<script>
+  String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+  };
 
-    let vizObjects = document.querySelectorAll('.graphviz');
+  let vizObjects = document.querySelectorAll('.graphviz');
 
-    for (let item of vizObjects) {
-      let svg = undefined
-      try {
-        svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
-      } catch(e) {
-        svg = `<pre class="error">${e}</pre>`;
-      }
-      item.outerHTML = svg;
+  for (let item of vizObjects) {
+    let svg = undefined
+    try {
+      svg = Viz(item.textContent.replaceAll('–', '--'), 'svg');
+    } catch(e) {
+      svg = `<pre class="error">${e}</pre>`;
     }
-  </script>
+    item.outerHTML = svg;
+  }
+</script>
 
+
+<script>
+  /* This POSTs to the clicks-api service to click numbers of downloads of different releases */
+  $(document).ready(function () {
+    $('a.app-download').click(function (ev) {
+      let downloadType = $(this).closest('a').attr('id')
+      $.post(`https://clicks.status.im/clicks/${downloadType}`)
+    });
+  });
+</script>
 
 </body>
 </html>
